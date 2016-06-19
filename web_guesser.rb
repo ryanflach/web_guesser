@@ -6,7 +6,8 @@ set :SECRET_NUMBER, rand(100)
 get '/' do
   guess = params["guess"]
   message = compare_guess(guess)
-  erb :index, :locals => {:number => settings.SECRET_NUMBER, :message => message}
+  color = get_color(message)
+  erb :index, :locals => {:number => settings.SECRET_NUMBER, :message => message, :color => color}
 end
 
 def compare_guess(guess)
@@ -22,5 +23,17 @@ def compare_guess(guess)
     "Too low!"
   else
     "You got it right!<br><br>The SECRET NUMBER is #{SECRET_NUMBER}."
+  end
+end
+
+def get_color(guess_outcome)
+  if guess_outcome == "Way too high!" || guess_outcome == "Way too low!"
+    "#E8000A"
+  elsif guess_outcome == "Too high!" || guess_outcome == "Too low!"
+    "#FFA197"
+  elsif guess_outcome[0..2] == "You"
+    "#00FF12"
+  else
+    ""
   end
 end
